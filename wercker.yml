@@ -1,0 +1,77 @@
+box: maven:3.5.4-jdk-8
+no-response-timeout: 15
+command-timeout: 60
+
+build:
+  steps:	
+    - blackbelttechnology/version-from-git-tag@1.0.4
+ 
+    - blackbelttechnology/version-from-pom@1.0.2:
+       pom: epsilon-runtime-parent/pom.xml
+      
+    - wercker/maven:
+      goals: versions:set
+      pom: ./epsilon-runtime-parent/pom.xml
+      maven_opts: -DnewVersion=${VERSION_FROM_POM_BASE_VERSION}-${VERSION_FROM_GIT_TAG_CURRENT_BRANCH_VALID_NAME}_${VERSION_FROM_GIT_TAG_COMMIT_COUNT}
+      cache_repo: true
+
+    - wercker/maven:
+      goals: clean install
+      settings: .maven.xml
+      profiles: release-github
+      cache_repo: true
+
+release:
+  steps:
+    - blackbelttechnology/version-from-git-tag@1.0.0
+
+    - blackbelttechnology/version-from-pom@1.0.2:
+       pom: epsilon-runtime-parent/pom.xml
+
+    - script:
+        name: create v$VERSION_FROM_POM_BASE_VERSION release branch from develop branch
+        code: |-
+             git checkout -b release/v$VERSION_FROM_POM_BASE_VERSION develop
+             
+    - wercker/maven:
+      goals: release:prepare
+      settings: .maven.xml
+      cache_repo: true
+
+    - wercker/maven:
+      goals: release:perform
+      settings: .maven.xml
+      cache_repo: true
+
+
+    - script:
+        name: get back to the develop branch
+        code: |-
+             git checkout develop
+
+    - script:
+        name: merge the version back into develos
+        code: |-
+             git merge --no-ff release/v$VERSION_FROM_POM_BASE_VERSION
+
+    - script:
+        name: git checkout master
+        code: |-
+             git checkout master
+
+    - script:
+        name: merge the version back into master but the tagged version instead of the release/v0.1 HEAD
+        code: |-
+             git merge --no-ff release/v$VERSION_FROM_POM_BASE_VERSIOs~1
+
+    - script:
+        name: push everything
+        code: |-
+             git checkout master
+
+    - script:
+        name: print version
+        code: |-
+             echo "=================================================================================================================================="
+             echo "  RELEASE VERSION: ${APP_VERSION}  OK"
+             echo "=================================================================================================================================="
