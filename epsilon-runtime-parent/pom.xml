@@ -293,7 +293,7 @@
             </build>
             <distributionManagement>
                 <repository>
-                    <id>blackbelt-nexus-distributiion</id>
+                    <id>blackbelt-nexus-distribution</id>
                     <url>https://nexus.blackbelt.cloud/repository/maven-wercker-test-release/</url>
                 </repository>
             </distributionManagement>
