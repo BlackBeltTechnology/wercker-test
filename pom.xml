@@ -2,17 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>hu.blackbelt.epsilon</groupId>
-        <artifactId>epsilon-runtime-parent</artifactId>
-        <version>1.1.0-SNAPSHOT</version>
-        <relativePath>epsilon-runtime-parent</relativePath>
+        <groupId>hu.blackbelt.wercker.test</groupId>
+        <artifactId>wercker-test-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>wercker-test-parent</relativePath>
     </parent>
-    <artifactId>epsilon-runtime-reactor</artifactId>
+    <artifactId>wercker-test-reactor</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>epsilon-runtime-parent</module>
-        <module>epsilon-runtime-utils</module>
-        <module>epsilon-runtime-execution</module>
+        <module>wercker-test-parent</module>
     </modules>
     <profiles>
 	<profile>
@@ -31,13 +29,7 @@
 	                    <tag>${project.version}</tag>
 	                    <fileSets>
                             <fileSet>
-                                <directory>epsilon-runtime-utils/target</directory>
-                                <includes>
-                                    <include>*.jar</include>
-                                </includes>
-                            </fileSet>
-                            <fileSet>
-                                <directory>epsilon-runtime-execution/target</directory>
+                                <directory>wercker-test-parent/target</directory>
                                 <includes>
                                     <include>*.jar</include>
                                 </includes>
