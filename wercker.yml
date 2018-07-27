@@ -21,6 +21,7 @@ build:
       profiles: release-github
       cache_repo: true
 
+# Based on http://vincent.demeester.fr/posts/2012-07-23-maven-release-gitflow/
 release:
   steps:
     - blackbelttechnology/version-from-git-tag@1.0.0
@@ -33,7 +34,7 @@ release:
     - script:
         name: create barnch for builder
         code: |-
-             git branch wercker/$WERCKER_BUILD_ID
+             git branch wercker_$WERCKER_BUILD_ID
 
     - blackbelttechnology/version-from-pom@1.0.2:
        pom: epsilon-runtime-parent/pom.xml
@@ -41,7 +42,7 @@ release:
     - script:
         name: create release branch from current commit
         code: |-
-             git checkout -b release/v$VERSION_FROM_POM_BASE_VERSION wercker/$WERCKER_BUILD_ID
+             git checkout -b release/v$VERSION_FROM_POM_BASE_VERSION wercker_$WERCKER_BUILD_ID
              
     - wercker/maven:
       goals: release:prepare
@@ -76,9 +77,21 @@ release:
              git merge --no-ff release/v$VERSION_FROM_POM_BASE_VERSIOs~1
 
     - script:
+        name: delete release branch
+        code: |-
+             git branch -D release/v0.1
+
+    - script:
+        name: delete builder branch
+        code: |-
+             git branch -D wercker_$WERCKER_BUILD_ID
+
+
+    - script:
         name: push everything
         code: |-
-             git checkout master
+             git push --all
+             git push --tags
 
     - script:
         name: print version
