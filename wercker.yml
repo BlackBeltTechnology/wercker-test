@@ -25,13 +25,23 @@ release:
   steps:
     - blackbelttechnology/version-from-git-tag@1.0.0
 
+    - script:
+        name: reset git state to actual commit
+        code: |-
+             git reset --hard $WERCKER_GIT_COMMIT
+
+    - script:
+        name: create barnch for builder
+        code: |-
+             git branch wercker/$WERCKER_BUILD_ID
+
     - blackbelttechnology/version-from-pom@1.0.2:
        pom: epsilon-runtime-parent/pom.xml
 
     - script:
-        name: create v$VERSION_FROM_POM_BASE_VERSION release branch from develop branch
+        name: create release branch from current commit
         code: |-
-             git checkout -b release/v$VERSION_FROM_POM_BASE_VERSION develop
+             git checkout -b release/v$VERSION_FROM_POM_BASE_VERSION wercker/$WERCKER_BUILD_ID
              
     - wercker/maven:
       goals: release:prepare
@@ -45,14 +55,13 @@ release:
       profiles: release-blackbelt
       cache_repo: true
 
-
     - script:
         name: get back to the develop branch
         code: |-
              git checkout develop
 
     - script:
-        name: merge the version back into develos
+        name: merge the version back into develop
         code: |-
              git merge --no-ff release/v$VERSION_FROM_POM_BASE_VERSION
 
