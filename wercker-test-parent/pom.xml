@@ -39,7 +39,7 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-        
+    
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -168,6 +168,16 @@
                             <localCheckout>true</localCheckout>
                         </configuration>
                     </plugin>
+                    
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-project-info-reports-plugin</artifactId>
+                        <configuration>
+                            <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                            <offline>true</offline>
+                        </configuration>
+                    </plugin>
+                    
                 </plugins>
             </build>
             <distributionManagement>
