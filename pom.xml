@@ -27,7 +27,8 @@
 	                    <releaseName>${project.version}</releaseName>
                         <prerelease>true</prerelease>
 	                    <tag>${project.version}</tag>
-	                    <fileSets>
+                        <!--
+                        <fileSets>
                             <fileSet>
                                 <directory>wercker-test-parent/target</directory>
                                 <includes>
@@ -35,6 +36,7 @@
                                 </includes>
                             </fileSet>
                         </fileSets>
+                        -->
 	                </configuration>
 	                <executions>
 	                    <execution>
