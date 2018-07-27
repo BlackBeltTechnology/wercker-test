@@ -36,11 +36,13 @@ release:
     - wercker/maven:
       goals: release:prepare
       settings: .maven.xml
+      profiles: release-blackbelt
       cache_repo: true
 
     - wercker/maven:
       goals: release:perform
       settings: .maven.xml
+      profiles: release-blackbelt
       cache_repo: true
 
 
