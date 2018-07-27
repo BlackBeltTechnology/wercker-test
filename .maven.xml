@@ -23,9 +23,6 @@
             <password>${env.BLACKBELT_NEXUS_PASSWORD}</password>
         </server>
 
-        <!-- Distribution repository. Use as upstream -->
-        <!-- -DaltDeploymentRepository=blackbelt-nexus-distributiion::default::https://nexus.blackbelt.cloud/repository/maven-judo-release  -->
-        <!-- The last part of URL can be vary on project basis -->
         <server>
             <id>blackbelt-nexus-distribution</id>
             <username>${env.BLACKBELT_NEXUS_USERNAME}</username>

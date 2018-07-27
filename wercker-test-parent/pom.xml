@@ -183,7 +183,7 @@
             <distributionManagement>
                 <repository>
                     <id>blackbelt-nexus-distribution</id>
-                    <url>https://nexus.blackbelt.cloud/repository/maven-wercker-test-release/</url>
+                    <url>https://nexus.blackbelt.cloud/repository/maven-wercker-test-release</url>
                 </repository>
             </distributionManagement>
         </profile>
