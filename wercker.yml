@@ -86,7 +86,7 @@ release:
         code: |-
              git commit -m "Release v$VERSION_FROM_POM_BASE_VERSION"
 
-        - script:
+    - script:
         name: tag release branch
         code: |-
              git tag -a v$VERSION_FROM_POM_BASE_VERSION
