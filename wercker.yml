@@ -53,18 +53,43 @@ release:
         name: create release branch from current commit
         code: |-
              git checkout -b release/v$VERSION_FROM_POM_BASE_VERSION wercker_$WERCKER_BUILD_ID
-             
+
+# Release plugoin does not work
+#    - wercker/maven:
+#      goals: release:prepare
+#      settings: .maven.xml
+#      profiles: release-blackbelt
+#      cache_repo: true
+
+#    - wercker/maven:
+#      goals: release:perform
+#      settings: .maven.xml
+#      profiles: release-blackbelt
+#      cache_repo: true
+
     - wercker/maven:
-      goals: release:prepare
+      goals: versions:set
+      pom: ./wercker-test-parent/pom.xml
+      maven_opts: -DnewVersion=${VERSION_FROM_POM_BASE_VERSION} -DgenerateBackupPoms=false
       settings: .maven.xml
       profiles: release-blackbelt
       cache_repo: true
 
     - wercker/maven:
-      goals: release:perform
+      goals: clean deploy
       settings: .maven.xml
       profiles: release-blackbelt
       cache_repo: true
+
+    - script:
+        name: commit to release branch
+        code: |-
+             git commit -m "Release v$VERSION_FROM_POM_BASE_VERSION"
+
+        - script:
+        name: tag release branch
+        code: |-
+             git tag -a v$VERSION_FROM_POM_BASE_VERSION
 
     - script:
         name: get back to the develop branch
@@ -76,20 +101,36 @@ release:
         code: |-
              git merge --no-ff release/v$VERSION_FROM_POM_BASE_VERSION
 
+    - wercker/maven:
+      goals: build-helper:parse-version versions:set
+      pom: ./wercker-test-parent/pom.xml
+      maven_opts: -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT -DgenerateBackupPoms=false
+      cache_repo: true
+
+    - script:
+        name: commit to release branch
+        code: |-
+             git commit -m "New development cycle"
+
     - script:
         name: git checkout master
         code: |-
              git checkout master
 
-    - script:
-        name: merge the version back into master but the tagged version instead of the release/v0.1 HEAD
-        code: |-
-             git merge --no-ff release/v$VERSION_FROM_POM_BASE_VERSIOs~1
+#    - script:
+#        name: merge the version back into master but the tagged version instead of the release/v0.1 HEAD
+#        code: |-
+#             git merge --no-ff release/v$VERSION_FROM_POM_BASE_VERSION~1
 
     - script:
-        name: delete release branch
+        name: merge the release version back into master
         code: |-
-             git branch -D release/v0.1
+             git merge --no-ff release/v$VERSION_FROM_POM_BASE_VERSION
+
+#    - script:
+#        name: delete release branch
+#        code: |-
+#             git branch -D release/v$VERSION_FROM_POM_BASE_VERSION
 
     - script:
         name: delete builder branch
