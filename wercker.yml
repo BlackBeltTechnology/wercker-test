@@ -12,7 +12,7 @@ build:
     - wercker/maven:
       goals: versions:set
       pom: ./wercker-test-parent/pom.xml
-      maven_opts: -DnewVersion=${VERSION_FROM_POM_BASE_VERSION}-${VERSION_FROM_GIT_TAG_CURRENT_BRANCH_VALID_NAME}_${VERSION_FROM_GIT_TAG_COMMIT_COUNT}
+      maven_opts: -DnewVersion=${VERSION_FROM_POM_BASE_VERSION}-${VERSION_FROM_GIT_TAG_CURRENT_BRANCH_VALID_NAME}-SNAPSHOT
       cache_repo: true
 
     - wercker/maven:
@@ -20,6 +20,14 @@ build:
       settings: .maven.xml
       profiles: release-github
       cache_repo: true
+
+  after-steps:
+    - mbrevda/github-status:
+      token: $GITHUB_ACCESS_TOKEN
+      context: WERCKER_APPLICATION_NAME
+      msg: build completed
+      fail: an error has occurred
+      url: $WERCKER_RUN_URL
 
 # Based on http://vincent.demeester.fr/posts/2012-07-23-maven-release-gitflow/
 release:
