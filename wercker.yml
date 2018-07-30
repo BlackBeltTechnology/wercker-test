@@ -55,41 +55,47 @@ release:
              git checkout -b release/v$VERSION_FROM_POM_BASE_VERSION wercker_$WERCKER_BUILD_ID
 
 # Release plugoin does not work
-#    - wercker/maven:
-#      goals: release:prepare
-#      settings: .maven.xml
-#      profiles: release-blackbelt
-#      cache_repo: true
-
-#    - wercker/maven:
-#      goals: release:perform
-#      settings: .maven.xml
-#      profiles: release-blackbelt
-#      cache_repo: true
-
     - wercker/maven:
-      goals: versions:set
-      pom: ./wercker-test-parent/pom.xml
-      maven_opts: -DnewVersion=${VERSION_FROM_POM_BASE_VERSION} -DgenerateBackupPoms=false
+      goals: release:prepare
       settings: .maven.xml
       profiles: release-blackbelt
       cache_repo: true
 
     - wercker/maven:
-      goals: clean deploy
+      goals: release:perform
       settings: .maven.xml
       profiles: release-blackbelt
       cache_repo: true
 
     - script:
-        name: commit to release branch
+        name: draw git
         code: |-
-             git commit -m "Release v$VERSION_FROM_POM_BASE_VERSION"
+             git log --graph --oneline --all
 
-    - script:
-        name: tag release branch
-        code: |-
-             git tag -a v$VERSION_FROM_POM_BASE_VERSION
+#    - wercker/maven:
+#      goals: versions:set
+#      pom: ./wercker-test-parent/pom.xml
+#      maven_opts: -DnewVersion=${VERSION_FROM_POM_BASE_VERSION} -DgenerateBackupPoms=false
+#      settings: .maven.xml
+#      profiles: release-blackbelt
+#      cache_repo: true
+
+#    - wercker/maven:
+#      goals: clean deploy
+#      settings: .maven.xml
+#      profiles: release-blackbelt
+#      cache_repo: true
+
+#    - script:
+#        name: commit to release branch
+#        code: |-
+#             git add .
+#             git commit -m "Release v$VERSION_FROM_POM_BASE_VERSION"
+
+#    - script:
+#        name: tag release branch
+#        code: |-
+#             git tag -a v$VERSION_FROM_POM_BASE_VERSION
 
     - script:
         name: get back to the develop branch
@@ -101,36 +107,42 @@ release:
         code: |-
              git merge --no-ff release/v$VERSION_FROM_POM_BASE_VERSION
 
-    - wercker/maven:
-      goals: build-helper:parse-version versions:set
-      pom: ./wercker-test-parent/pom.xml
-      maven_opts: -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT -DgenerateBackupPoms=false
-      cache_repo: true
+#    - wercker/maven:
+#      goals: build-helper:parse-version versions:set
+#      pom: ./wercker-test-parent/pom.xml
+#      maven_opts: -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT -DgenerateBackupPoms=false
+#      cache_repo: true
 
-    - script:
-        name: commit to release branch
-        code: |-
-             git commit -m "New development cycle"
+#    - script:
+#        name: commit to release branch
+#        code: |-
+#             git commit -m "New development cycle"
 
     - script:
         name: git checkout master
         code: |-
              git checkout master
 
-#    - script:
-#        name: merge the version back into master but the tagged version instead of the release/v0.1 HEAD
-#        code: |-
-#             git merge --no-ff release/v$VERSION_FROM_POM_BASE_VERSION~1
-
     - script:
-        name: merge the release version back into master
+        name: merge the version back into master but the tagged version instead of the release/v0.1 HEAD
         code: |-
-             git merge --no-ff release/v$VERSION_FROM_POM_BASE_VERSION
+             git merge --no-ff release/v$VERSION_FROM_POM_BASE_VERSION~1
+
+#    - script:
+#        name: merge the release version back into master
+#        code: |-
+#             git merge --no-ff release/v$VERSION_FROM_POM_BASE_VERSION
 
 #    - script:
 #        name: delete release branch
 #        code: |-
 #             git branch -D release/v$VERSION_FROM_POM_BASE_VERSION
+
+
+    - script:
+        name: draw git
+        code: |-
+             git log --graph --oneline --all
 
     - script:
         name: delete builder branch
@@ -141,8 +153,9 @@ release:
     - script:
         name: push everything
         code: |-
-             git push --all
-             git push --tags
+             REMOTE="https://$GITHUB_ACCESS_TOKEN@github.com/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY.git"
+             git push $REMOTE --all
+             git push $REMOTE --tags
 
     - script:
         name: print version
