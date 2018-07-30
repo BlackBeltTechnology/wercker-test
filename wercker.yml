@@ -62,10 +62,10 @@ release:
         code: |-
              git reset --hard $WERCKER_GIT_COMMIT
 
-    - script:
-        name: reset fetch from remote
-        code: |-
-             git fetch origin
+#    - script:
+#        name: reset fetch from remote
+#        code: |-
+#             git fetch origin
 
     - script:
         name: display branches
@@ -133,6 +133,7 @@ release:
         name: get back to the develop branch
         code: |-
              git checkout develop
+             git branch -u upstream/develop
 
     - script:
         name: merge the version back into develop
