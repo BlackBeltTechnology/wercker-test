@@ -28,13 +28,18 @@ release:
       secretkeys: $GPG_SECRET_KEYS 
       ownertrust: $GPG_OWNERTRUST
 
-    - add-to-known_hosts:
-      hostname: github.com
-      fingerprint: $GITHUB_RSA_FINGERPRINT
-      type: rsa
+#    - add-to-known_hosts:
+#      hostname: github.com
+#      fingerprint: $GITHUB_RSA_FINGERPRINT
+#      type: rsa
 
-    - add-ssh-key:
-      keyname: GITHUB_SSH_KEY
+    - script:
+        name: set git remote origis
+        code: |-
+             git remote set-url origin https://$GITHUB_ACCESS_TOKEN@github.com/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY.git
+
+#    - add-ssh-key:
+#      keyname: GITHUB_SSH_KEY
 
     - script:
         name: setup git for maven
@@ -47,7 +52,7 @@ release:
     - script:
         name: reset git state to actual commit
         code: |-
-             git reset --hard $WERCKER_GIT_COMMIT
+             git reset --hard $WERCKER_RUN_ID
 
     - script:
         name: reset fetch from remote
@@ -63,7 +68,7 @@ release:
     - script:
         name: create barnch for builder
         code: |-
-             git branch wercker_$WERCKER_BUILD_ID
+             git branch wercker_$WERCKER_RUN_ID
 
     - blackbelttechnology/version-from-pom@1.0.2:
        pom: wercker-test-parent/pom.xml
@@ -71,7 +76,7 @@ release:
     - script:
         name: create release branch from current commit
         code: |-
-             git checkout -b release/v$VERSION_FROM_POM_BASE_VERSION wercker_$WERCKER_BUILD_ID
+             git checkout -b release/v$VERSION_FROM_POM_BASE_VERSION wercker_$WERCKER_RUN_ID
 
 # Release plugoin does not work
     - wercker/maven:
@@ -137,6 +142,7 @@ release:
 #        code: |-
 #             git commit -m "New development cycle"
 
+
     - script:
         name: display branches
         code: |-
@@ -173,15 +179,16 @@ release:
     - script:
         name: delete builder branch
         code: |-
-             git branch -D wercker_$WERCKER_BUILD_ID
+             git branch -D wercker_$WERCKER_RUN_ID
 
 
     - script:
         name: push everything
         code: |-
-             REMOTE="https://$GITHUB_ACCESS_TOKEN@github.com/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY.git"
-             git push $REMOTE --all
-             git push $REMOTE --tags
+             git push origin master
+             git push origin develop
+             git push origin release/v$VERSION_FROM_POM_BASE_VERSION             
+             git push origin --tags
 
     - script:
         name: print version
