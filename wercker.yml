@@ -44,7 +44,9 @@ release:
     - script:
         name: set git remote origis
         code: |-
-             git remote set-url origin https://$GITHUB_ACCESS_TOKEN@github.com/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY.git
+             rm -rf .git
+             git init
+             git remote add origin https://$GITHUB_ACCESS_TOKEN@github.com/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY.git
              git remote update origin
              git fetch origin
              git fetch --all
