@@ -36,7 +36,8 @@ release:
     - script:
         name: set git remote origis
         code: |-
-             git remote set-url origin https://$GITHUB_ACCESS_TOKEN@github.com/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY.git
+             git remote add upstream https://$GITHUB_ACCESS_TOKEN@github.com/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY.git
+             git fetch upstream
 
 
 #    - add-ssh-key:
@@ -156,13 +157,21 @@ release:
              git branch -a
              git branch -r
 
+#    - script:
+#        name: git checkout master
+#        code: |-
+#             git remote set-branches --add origin master
+#             git fetch
+#             git branch master_$WERCKER_RUN_ID origin/master
+#             git checkout master_$WERCKER_RUN_ID
+
+
     - script:
         name: git checkout master
         code: |-
-             git remote set-branches --add origin master
-             git fetch
-             git branch master_$WERCKER_RUN_ID origin/master
+             git branch master_$WERCKER_RUN_ID upstream/master
              git checkout master_$WERCKER_RUN_ID
+
 
     - script:
         name: merge the version back into master but the tagged version instead of the release/v0.1 HEAD
@@ -194,10 +203,10 @@ release:
     - script:
         name: push everything
         code: |-
-             git push origin master_$WERCKER_RUN_ID 
-             git push origin develop
-             git push origin release/v$VERSION_FROM_POM_BASE_VERSION             
-             git push origin --tags
+             git push upstream master_$WERCKER_RUN_ID 
+             git push upstream develop
+             git push upstream release/v$VERSION_FROM_POM_BASE_VERSION             
+             git push upstream --tags
 
     - script:
         name: print version
