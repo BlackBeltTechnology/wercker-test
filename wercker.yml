@@ -38,6 +38,7 @@ release:
         code: |-
              git remote set-url origin https://$GITHUB_ACCESS_TOKEN@github.com/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY.git
 
+
 #    - add-ssh-key:
 #      keyname: GITHUB_SSH_KEY
 
@@ -48,6 +49,12 @@ release:
              git config --global user.name "Wercker Release"
     
     - blackbelttechnology/version-from-git-tag@1.0.0
+
+    - script:
+        name: add master origin
+        code: |-
+             git config branch.master.remote origin
+             git config branch.master.merge refs/heads/master
 
     - script:
         name: reset git state to actual commit
@@ -152,8 +159,7 @@ release:
     - script:
         name: git checkout master
         code: |-
-             git branch master origin/master 
-             git checkout master
+             git checkout -b master_$WERCKER_RUN_ID origin/master
 
     - script:
         name: merge the version back into master but the tagged version instead of the release/v0.1 HEAD
@@ -185,7 +191,7 @@ release:
     - script:
         name: push everything
         code: |-
-             git push origin master
+             git push origin master_$WERCKER_RUN_ID 
              git push origin develop
              git push origin release/v$VERSION_FROM_POM_BASE_VERSION             
              git push origin --tags
