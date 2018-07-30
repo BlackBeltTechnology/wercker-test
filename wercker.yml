@@ -52,7 +52,7 @@ release:
     - script:
         name: reset git state to actual commit
         code: |-
-             git reset --hard $WERCKER_RUN_ID
+             git reset --hard $WERCKER_GIT_COMMIT
 
     - script:
         name: reset fetch from remote
