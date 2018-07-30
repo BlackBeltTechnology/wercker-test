@@ -32,7 +32,10 @@ release:
       hostname: github.com
       fingerprint: $GITHUB_RSA_FINGERPRINT
       type: rsa
-    
+
+    - add-ssh-key:
+      keyname: GITHUB_SSH_KEY
+
     - script:
         name: setup git for maven
         code: |-
