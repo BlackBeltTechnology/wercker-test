@@ -58,6 +58,7 @@ release:
         name: display branches
         code: |-
              git branch -a
+             git branch -r
 
     - script:
         name: create barnch for builder
@@ -135,6 +136,12 @@ release:
 #        name: commit to release branch
 #        code: |-
 #             git commit -m "New development cycle"
+
+    - script:
+        name: display branches
+        code: |-
+             git branch -a
+             git branch -r
 
     - script:
         name: git checkout master
