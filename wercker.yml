@@ -52,7 +52,7 @@ release:
     - script:
         name: reset fetch from remote
         code: |-
-             git fetch
+             git fetch origin
 
     - script:
         name: create barnch for builder
