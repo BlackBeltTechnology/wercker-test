@@ -55,6 +55,11 @@ release:
              git fetch origin
 
     - script:
+        name: display branches
+        code: |-
+             git branch -a
+
+    - script:
         name: create barnch for builder
         code: |-
              git branch wercker_$WERCKER_BUILD_ID
