@@ -50,11 +50,11 @@ release:
     
     - blackbelttechnology/version-from-git-tag@1.0.0
 
-    - script:
-        name: add master origin
-        code: |-
-             git config branch.master.remote origin
-             git config branch.master.merge refs/heads/master
+#    - script:
+#        name: add master origin
+#        code: |-
+#             git config branch.master.remote origin
+#             git config branch.master.merge refs/heads/master
 
     - script:
         name: reset git state to actual commit
@@ -159,7 +159,10 @@ release:
     - script:
         name: git checkout master
         code: |-
-             git checkout -b master_$WERCKER_RUN_ID origin/master
+             git remote set-branches --add origin master
+             git fetch
+             git branch master_$WERCKER_RUN_ID origin/master
+             git checkout master_$WERCKER_RUN_ID
 
     - script:
         name: merge the version back into master but the tagged version instead of the release/v0.1 HEAD
