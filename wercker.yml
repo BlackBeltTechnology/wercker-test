@@ -42,6 +42,11 @@ release:
              git reset --hard $WERCKER_GIT_COMMIT
 
     - script:
+        name: reset fetch from remote
+        code: |-
+             git fetch
+
+    - script:
         name: create barnch for builder
         code: |-
              git branch wercker_$WERCKER_BUILD_ID
