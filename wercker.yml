@@ -134,7 +134,7 @@ release:
     - script:
         name: git checkout master
         code: |-
-             git checkout master
+             git checkout -B master origin/master
 
     - script:
         name: merge the version back into master but the tagged version instead of the release/v0.1 HEAD
