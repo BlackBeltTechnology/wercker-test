@@ -95,10 +95,10 @@ release:
     - blackbelttechnology/version-from-pom@1.0.2:
        pom: wercker-test-parent/pom.xml
 
-#    - script:
-#        name: create release branch from current commit
-#        code: |-
-#             git checkout -b release/v$VERSION_FROM_POM_BASE_VERSION wercker_$WERCKER_RUN_ID
+    - script:
+        name: create release branch from current commit
+        code: |-
+             git checkout -b release/v$VERSION_FROM_POM_BASE_VERSION wercker_$WERCKER_RUN_ID
 
 # Release plugoin does not work
     - wercker/maven:
@@ -164,20 +164,6 @@ release:
 #        code: |-
 #             git commit -m "New development cycle"
 
-
-    - script:
-        name: display branches
-        code: |-
-             git branch -a
-             git branch -r
-
-#    - script:
-#        name: git checkout master
-#        code: |-
-#             git remote set-branches --add origin master
-#             git fetch
-#             git branch master_$WERCKER_RUN_ID origin/master
-#             git checkout master_$WERCKER_RUN_ID
 
     - script:
         name: git checkout master
