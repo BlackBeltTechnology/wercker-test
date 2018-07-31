@@ -83,7 +83,7 @@ release:
         code: |-
              git checkout -b release/v$VERSION_FROM_POM_BASE_VERSION wercker_$WERCKER_RUN_ID
 
-## Using release plugin
+## Deploy using release plugin
 #    - wercker/maven:
 #      goals: release:prepare
 #      settings: .maven.xml
@@ -128,6 +128,12 @@ release:
       maven_opts: -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT -DgenerateBackupPoms=false
       cache_repo: true
 
+    - script:
+        name: commit to release branch
+        code: |-
+             git commit -m "Next development cycle"
+
+# End of deploy
 
     - script:
         name: get back to the develop branch
@@ -138,12 +144,6 @@ release:
         name: merge the version back into develop
         code: |-
              git merge --no-ff release/v$VERSION_FROM_POM_BASE_VERSION
-
-
-    - script:
-        name: commit to release branch
-        code: |-
-             git commit -m "Next development cycle"
 
 
     - script:
