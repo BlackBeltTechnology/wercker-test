@@ -4,7 +4,7 @@
     <parent>
         <groupId>hu.blackbelt.wercker.test</groupId>
         <artifactId>wercker-test-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
         <relativePath>wercker-test-parent</relativePath>
     </parent>
     <artifactId>wercker-test-reactor</artifactId>
