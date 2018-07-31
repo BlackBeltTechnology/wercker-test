@@ -182,6 +182,7 @@ release:
     - script:
         name: push everything
         code: |-
-             git push --all
+             git push master_$WERCKER_RUN_ID origin/master
+             git push develop origin/develop
              git push origin --tags
 
