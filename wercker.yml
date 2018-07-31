@@ -120,7 +120,7 @@ release:
     - script:
         name: tag release branch
         code: |-
-             git tag -a v$VERSION_FROM_POM_BASE_VERSION
+             git tag -a v$VERSION_FROM_POM_BASE_VERSION -m "Release v$VERSION_FROM_POM_BASE_VERSION"
 
     - wercker/maven:
       goals: build-helper:parse-version versions:set
