@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>hu.blackbelt.wercker.test</groupId>
+        <artifactId>wercker-test-parent</artifactId>
+        <version>1.0.0</version>
+        <relativePath>wercker-test-parent</relativePath>
+    </parent>
+    <artifactId>wercker-test-reactor</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>wercker-test-parent</module>
+    </modules>
+    <profiles>
+	<profile>
+	    <id>release-github</id>
+	    <build>
+	        <plugins>
+	            <plugin>
+	                <groupId>de.jutzig</groupId>
+	                <artifactId>github-release-plugin</artifactId>
+	                <version>1.2.0</version>
+	                <configuration>
+	                    <repositoryId>https://github.com/BlackBeltTechnology/wercker-test.git</repositoryId>
+                        <description>Branch: ${env.WERCKER_GIT_BRANCH} Wercker: ${env.WERCKER_RUN_URL}</description>
+	                    <releaseName>${project.version}</releaseName>
+                        <prerelease>true</prerelease>
+	                    <tag>${project.version}</tag>
+                        <!--
+                        <fileSets>
+                            <fileSet>
+                                <directory>wercker-test-parent/target</directory>
+                                <includes>
+                                    <include>*.jar</include>
+                                </includes>
+                            </fileSet>
+                        </fileSets>
+                        -->
+	                </configuration>
+	                <executions>
+	                    <execution>
+	                        <id>release-to-github</id>
+	                        <phase>install</phase>
+	                        <goals>
+	                            <goal>release</goal>
+	                        </goals>
+	                    </execution>
+	                </executions>
+	            </plugin>
+	        </plugins>
+	    </build>	    
+	</profile>
+    </profiles>
+</project>
