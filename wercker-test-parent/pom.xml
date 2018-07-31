@@ -4,7 +4,7 @@
     <groupId>hu.blackbelt.wercker.test</groupId>
     <artifactId>wercker-test-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     
     <name>wercker-test</name>
     <description>Wercker test</description>
@@ -18,7 +18,7 @@
         <connection>scm:git:git://github.com/BlackBeltTechnology/wercker-test.git</connection>
         <developerConnection>scm:git:ssh://${git.username}@github.com:BlackBeltTechnology/wercker-test.git</developerConnection>
         <url>http://github.com/BlackBeltTechnology/wercker-test</url>
-      <tag>v1.0.0</tag>
+      <tag>HEAD</tag>
   </scm>
     
     <developers>
