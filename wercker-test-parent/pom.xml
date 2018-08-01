@@ -4,7 +4,7 @@
     <groupId>hu.blackbelt.wercker.test</groupId>
     <artifactId>wercker-test-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
     
     <name>wercker-test</name>
     <description>Wercker test</description>
