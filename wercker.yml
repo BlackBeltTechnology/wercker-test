@@ -125,7 +125,7 @@ release:
     - wercker/maven:
       goals: build-helper:parse-version versions:set
       pom: ./wercker-test-parent/pom.xml
-      maven_opts: '-DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT -DgenerateBackupPoms=false'
+      maven_opts: "-DnewVersion=\\${parsedVersion.majorVersion}.\\${parsedVersion.minorVersion}.\\${parsedVersion.nextIncrementalVersion}-SNAPSHOT -DgenerateBackupPoms=false"
       cache_repo: true
 
     - script:
