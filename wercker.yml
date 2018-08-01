@@ -4,12 +4,7 @@ command-timeout: 60
 
 build:
   steps:	
-
-    - script:
-        name: tag release branch
-        code: "\\"
-
-    
+   
     - blackbelttechnology/version-from-git-tag@1.0.4
  
     - blackbelttechnology/version-from-pom@1.0.2:
@@ -128,13 +123,10 @@ release:
         code: |-
              git tag -a v$VERSION_FROM_POM_BASE_VERSION -m "Release v$VERSION_FROM_POM_BASE_VERSION"
 
-    - wercker/maven:
-      goals: build-helper:parse-version versions:set
-      pom: ./wercker-test-parent/pom.xml
-      maven_opts: |-
-             -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT -DgenerateBackupPoms=false
-      cache_repo: true
-
+    - script:
+        name: increase version number
+        code: "mvn build-helper:parse-version versions:set -DnewVersion=\\${parsedVersion.majorVersion}.\\${parsedVersion.minorVersion}.\\${parsedVersion.nextIncrementalVersion}sSNAPSHOT -DgenerateBackupPoms=false ./wercker-test-parent/pom.xml"
+ 
     - script:
         name: commit to release branch
         code: |-
