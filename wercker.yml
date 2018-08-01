@@ -125,7 +125,7 @@ release:
 
     - script:
         name: increase version number
-        code: "mvn build-helper:parse-version versions:set -DnewVersion=\\${parsedVersion.majorVersion}.\\${parsedVersion.minorVersion}.\\${parsedVersion.nextIncrementalVersion}sSNAPSHOT -DgenerateBackupPoms=false ./wercker-test-parent/pom.xml"
+        code: "mvn build-helper:parse-version versions:set -DnewVersion=\\${parsedVersion.majorVersion}.\\${parsedVersion.minorVersion}.\\${parsedVersion.nextIncrementalVersion}sSNAPSHOT -DgenerateBackupPoms=false ./wercker-test-parent/pom.xml  -Dmaven.repo.local=$WERCKER_CACHE_DIR/.m2"
  
     - script:
         name: commit to release branch
